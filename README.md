@@ -1,2 +1,2 @@
 # Light Sensor
-![Pro Trinket Light Sensor](circuit.pdf?raw=true "Circuit Diagram")
+![Pro Trinket Light Sensor](circuit.png?raw=true "Circuit Diagram")
