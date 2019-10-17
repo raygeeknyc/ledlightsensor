@@ -9,12 +9,13 @@
 #define PIN_CDS A0
 
 #define SENSOR_SAMPLES 5
-#define MAX_SENSOR_READING 1023
+#define MIN_SENSOR_READING 300
+#define MAX_SENSOR_READING 1000
 
 int current_light_level;
 int previous_light_level;
 
-#define LIGHT_CHANGE_THRESHOLD 50
+#define LIGHT_CHANGE_THRESHOLD 100
 #define LED_STEP 30
 #define LED_MAX_VALUE 255
 #define LED_MIN_VALUE 0
@@ -57,11 +58,14 @@ void setup() {
 
 void loop() {
   current_light_level = getLightLevel();
-  if (current_light_level > previous_light_level + LIGHT_CHANGE_THRESHOLD) {
-    led_brightness = max(led_brightness+LED_STEP, LED_MAX_VALUE);
+
+  if (current_light_level > (previous_light_level + LIGHT_CHANGE_THRESHOLD) 
+    || current_light_level >= MAX_SENSOR_READING) {
+    led_brightness = min(led_brightness+LED_STEP, LED_MAX_VALUE);
     previous_light_level = current_light_level;
-  } else if (current_light_level < previous_light_level - LIGHT_CHANGE_THRESHOLD) {
-    led_brightness = min(led_brightness-LED_STEP, LED_MIN_VALUE);
+  } else if (current_light_level < (previous_light_level - LIGHT_CHANGE_THRESHOLD)
+    || current_light_level <= MIN_SENSOR_READING) {
+    led_brightness = max(led_brightness-LED_STEP, LED_MIN_VALUE);
     previous_light_level = current_light_level;
   }
   analogWrite(PIN_LED, led_brightness);
